@@ -781,11 +781,11 @@ class MainTagger:
                         temp2.append(tokenList[j] + "/" + tags[i])
                         j += 1
 
-                if self.TwoPhaseType >= 1: 
-                    # ArrayList<String>
-                    p = self.tagging2Phase(temp2)
-                    for k in range(0, len(p)): 
-                        ret.append(p[k]);
+#                 if self.TwoPhaseType >= 1: 
+#                     # ArrayList<String>
+#                     p = self.tagging2Phase(temp2)
+#                     for k in range(0, len(p)): 
+#                         ret.append(p[k]);
 
             if self.TwoPhaseType == 0: 
                 ret = temp;

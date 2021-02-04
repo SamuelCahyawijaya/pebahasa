@@ -1,6 +1,8 @@
 PEBAHASA
 ========
 
+**Notes:** This is a Python3 compatible version of Indonesian POS Tagger ported from https://github.com/pebbie/pebahasa, please check `pos_tagging_example.ipynb` for a simple example on how to use it.
+
 Indonesian NLP (Natural Language Processing) web service using `bottle <http://github.com/defnull/bottle>`_
 for now it's still an early morphological operation to break down a lexicon into phonemes
 
