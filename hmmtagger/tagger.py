@@ -1,5 +1,5 @@
-from ngram import *
-from prob import *
+from .ngram import *
+from .prob import *
 import math
 from copy import copy
 
@@ -124,7 +124,7 @@ class BigramDecoder(Decoder):
 
         # List<Integer>
         tagSequence = []
-        for i in xrange(0, len(tagMatrix)): 
+        for i in range(0, len(tagMatrix)): 
             tagSequence.append(tail.tag)
             if beforeTail is not None: 
                 tail = beforeTail
@@ -151,10 +151,10 @@ class BigramDecoder(Decoder):
         tagMatrix[0][0].probs = 0.0
         tagMatrix[0][0].bps = None
         
-        for i in xrange(2, len(sentence)): 
+        for i in range(2, len(sentence)): 
             tagMatrix.append([])
             if self.debug: 
-                print "###"
+                print("###")
             for tagEntry in self.WH.tagProbs(sentence[i]): 
                 # MatrixEntryBigram
                 newEntry = MatrixEntryBigram(tagEntry)
@@ -163,7 +163,7 @@ class BigramDecoder(Decoder):
                 # MatrixEntryBigram
                 maxEntry = None
                 if self.debug: 
-                    print "@cari max prev:"
+                    print("@cari max prev:")
                 for t in tagMatrix[i - 2]: 
                     # BiGram
                     bg = BiGram(t.tag, tagEntry)
@@ -182,13 +182,13 @@ class BigramDecoder(Decoder):
                         newEntry.probs = prob
                     
                     if self.debug: 
-                        print "BigramDecode : " , sentence[i] , "\nTag:" , tagEntry , "\nnow:", prob , " prev:" , t.probs , " " , bigramProb , " " , self.WH.tagProbs(sentence[i])[tagEntry]
+                        print("BigramDecode : " , sentence[i] , "\nTag:" , tagEntry , "\nnow:", prob , " prev:" , t.probs , " " , bigramProb , " " , self.WH.tagProbs(sentence[i])[tagEntry])
 
                 newEntry.bps = maxEntry
                 tagMatrix[i - 1].append(newEntry)
 
             if self.debug: 
-                print "--"
+                print("--")
         
         return tagMatrix
 
@@ -230,7 +230,7 @@ class TrigramDecoder(Decoder):
 
             # List<Integer>
             tagSequence = []
-            for i in xrange(0, len(tagMatrix)): 
+            for i in range(0, len(tagMatrix)): 
                 tagSequence.append(tail.tag)
                 if beforeTail != None: 
                     # MatrixEntryTrigram
@@ -242,7 +242,7 @@ class TrigramDecoder(Decoder):
             tagSequence.reverse()
             return Sequence(tagSequence, highestProb, model)
         except:
-            print "backtrack error"
+            print("backtrack error")
 
     def viterbi(self, sentence):
         """
@@ -264,7 +264,7 @@ class TrigramDecoder(Decoder):
         tagMatrix[1][0].bps[firstEntry] = None
         # double
         beam = 0.0
-        for i in xrange(2, len(sentence)): 
+        for i in range(2, len(sentence)): 
             # double
             columnHighestProb = -1e300 #float('-inf')
             tagMatrix.append([])
@@ -343,7 +343,7 @@ class BigramSucceedDecoder(Decoder):
 
         # List<Integer>
         tagSequence = []
-        for i in xrange(0, len(tagMatrix)): 
+        for i in range(0, len(tagMatrix)): 
             tagSequence.append(tail.tag)
             if beforeTail != None: 
                 tail = beforeTail
@@ -370,7 +370,7 @@ class BigramSucceedDecoder(Decoder):
         tagMatrix[0].append(MatrixEntryBigram(startTag))
         tagMatrix[0][0].probs = 0.0
         tagMatrix[0][0].bps = None
-        for i in xrange(2, len(sentence)): 
+        for i in range(2, len(sentence)): 
             tagMatrix.append([])
             # int
             sepIndexCurr = sentence[i].rfind('/')
@@ -379,7 +379,7 @@ class BigramSucceedDecoder(Decoder):
             if i < len(sentence) - 1: 
                 sepIndexSucc = sentence[i + 1].rfind('/')
             if sepIndexCurr == -1 or sepIndexSucc == -1: 
-                print "Error BigramSucceedDecoder: curr/succeed-ing POS tag missing.."
+                print("Error BigramSucceedDecoder: curr/succeed-ing POS tag missing..")
                 return
 
             # String
@@ -389,7 +389,7 @@ class BigramSucceedDecoder(Decoder):
             if sepIndexSucc != -2: 
                 Succeedtag = sentence[i + 1][sepIndexSucc + 1:]
             if self.debug: 
-                print "###"
+                print("###")
             for tagEntry in self.WH.tagProbs(word): 
                 # MatrixEntryBigram
                 newEntry = MatrixEntryBigram(tagEntry)
@@ -398,7 +398,7 @@ class BigramSucceedDecoder(Decoder):
                 # MatrixEntryBigram
                 maxEntry = None
                 if self.debug: 
-                    print "@cari max prev:\n"
+                    print("@cari max prev:\n")
                 for t in tagMatrix[i - 2]: 
                     # double
                     prob = 0.0
@@ -427,7 +427,7 @@ class BigramSucceedDecoder(Decoder):
                 tagMatrix[i - 1].append(newEntry)
 
             if self.debug: 
-                print "\n"
+                print("\n")
         return tagMatrix
 
 class TrigramSucceedDecoder(Decoder):
@@ -466,7 +466,7 @@ class TrigramSucceedDecoder(Decoder):
 
             # List<Integer>
             tagSequence = []
-            for i in xrange(0, len(tagMatrix)): 
+            for i in range(0, len(tagMatrix)): 
                 tagSequence.append(tail.tag)
                 if beforeTail is not None: 
                     # MatrixEntryTrigram
@@ -478,7 +478,7 @@ class TrigramSucceedDecoder(Decoder):
             tagSequence.reverse()
             return Sequence(tagSequence, highestProb, model)
         except:
-            print "TrigramSucceedDecoder.backtrack error"
+            print("TrigramSucceedDecoder.backtrack error")
 
     def viterbi(self, sentence):
         """
@@ -500,7 +500,7 @@ class TrigramSucceedDecoder(Decoder):
         tagMatrix[1][0].bps[firstEntry] = None
         # double
         beam = 0.0
-        for i in xrange(2, len(sentence)): 
+        for i in range(2, len(sentence)): 
             # double
             columnHighestProb = -1e300 #float('-inf')
             tagMatrix.append([])
@@ -511,7 +511,7 @@ class TrigramSucceedDecoder(Decoder):
             if i < len(sentence) - 1: 
                 sepIndexSucc = sentence[i + 1].rfind('/')
             if sepIndexCurr == -1 or sepIndexSucc == -1: 
-                print "Error BigramSucceedDecoder: curr/succeed-ing POS tag missing.."
+                print("Error BigramSucceedDecoder: curr/succeed-ing POS tag missing..")
                 return
 
             # String
@@ -629,13 +629,14 @@ class MainTagger:
 
     def loadData(self):
         try:
-            self.model = Model(open(self.fileLexicon, "r"), open(self.fileNGram, "r"))
+            self.model = Model(open(self.fileLexicon, "r", encoding='latin-1'), open(self.fileNGram, "r", encoding='latin-1'))
             self.dl = None
             if self.useLexicon != 0: 
                 self.dl = DicLexicon("resource/inlex.txt", "resource/cattable.txt", self.model.getNumberTags())
 
-        except:
-            print "Training file doesn't exist !\n"
+        except Exception as e:
+            print(e)
+            print("Training file doesn't exist !\n")
             return
             
         
@@ -715,17 +716,17 @@ class MainTagger:
             # List<String>
             temp2 = []
             if tags is not None:
-                for i in xrange(1, len(tags) - 1): 
+                for i in range(1, len(tags) - 1): 
                     if not (tags[i] == "<STARTTAG>") and not (tags[i] == "<ENDTAG>"): 
-                        temp.append(tokenList[j] + "/" + tags[i])
-                        temp2.append(tokenList[j] + "/" + tags[i])
+                        temp.append((tokenList[j], tags[i]))
+                        temp2.append((tokenList[j], tags[i]))
                         j += 1
 
-            if self.TwoPhaseType >= 1: 
-                # ArrayList<String>
-                p = self.tagging2Phase(temp2)
-                for k in xrange(0, len(p)): 
-                    ret.append(p[k]);
+#             if self.TwoPhaseType >= 1: 
+#                 # ArrayList<String>
+#                 p = self.tagging2Phase(temp2)
+#                 for k in range(0, len(p)): 
+#                     ret.append(p[k]);
 
             n += 1
 
@@ -774,8 +775,8 @@ class MainTagger:
                 j = 2
                 # List<String>
                 temp2 = []
-                for i in xrange(1,len(tags) - 1):
-                    if (tags[i] <> "<STARTTAG>") and (tags[i] <> "<ENDTAG>"): 
+                for i in range(1,len(tags) - 1):
+                    if (tags[i] != "<STARTTAG>") and (tags[i] != "<ENDTAG>"): 
                         temp.append(tokenList[j] + "/" + tags[i])
                         temp2.append(tokenList[j] + "/" + tags[i])
                         j += 1
@@ -783,7 +784,7 @@ class MainTagger:
                 if self.TwoPhaseType >= 1: 
                     # ArrayList<String>
                     p = self.tagging2Phase(temp2)
-                    for k in xrange(0, len(p)): 
+                    for k in range(0, len(p)): 
                         ret.append(p[k]);
 
             if self.TwoPhaseType == 0: 
@@ -791,7 +792,7 @@ class MainTagger:
             return ret
             
         except:
-            print "taggingFile error"
+            print("taggingFile error")
             return None
 
 
@@ -814,7 +815,7 @@ class MainTagger:
                 tokens = re.split("\\s+", line)
                 if len(tokens) == 1: 
                     continue
-                for j in xrange(0, len(tokens)): 
+                for j in range(0, len(tokens)): 
                     # int
                     sepIndex = tokens[j].rfind('/')
                     tokens[j] = tokens[j][0: sepIndex]
@@ -837,7 +838,7 @@ class MainTagger:
                 j = 2
                 # List<String>
                 temp2 = []
-                for i in xrange(1, len(tags) - 1) :
+                for i in range(1, len(tags) - 1) :
                     if not (tags[i] == "<STARTTAG>") and not (tags[i] == "<ENDTAG>"): 
                         temp.append(tokenList[j] + "/" + tags[i])
                         temp2.append(tokenList[j] + "/" + tags[i])
@@ -846,7 +847,7 @@ class MainTagger:
                 if self.TwoPhaseType >= 1: 
                     # ArrayList<String>
                     p = self.tagging2Phase(temp2)
-                    for k in xrange(0, len(p)):
+                    for k in range(0, len(p)):
                         ret.append(p[k])
 
             if self.TwoPhaseType == 0: 
@@ -854,7 +855,7 @@ class MainTagger:
             return ret
             
         except:
-            print "MainTagger.taggingTaggedFile error"
+            print("MainTagger.taggingTaggedFile error")
             return None
 
     def isOOV(self, word):
@@ -891,7 +892,7 @@ class MainTagger:
         i = None
         # int
         j = 2
-        for i in xrange(1, len(tags) - 1): 
+        for i in range(1, len(tags) - 1): 
             if not (tags[i] == "<STARTTAG>") and not (tags[i] == "<ENDTAG>"): 
                 # int
                 sepIndex = tokenList[j].rfind('/');
@@ -902,6 +903,3 @@ class MainTagger:
 
 
         return ret
-
-
-

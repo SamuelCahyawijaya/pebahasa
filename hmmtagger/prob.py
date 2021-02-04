@@ -1,7 +1,7 @@
-from ngram import *
+from .ngram import *
 import math
 import re
-import java2python_runtime
+from .java2python_runtime import *
 
 class WordProb:
     """
@@ -43,7 +43,7 @@ class WordProb:
                 # double
                 p = 0.0
                 if self.debug: 
-                    print "WordProb : ", word , " " , freq , " " , uniGramFreqs[UniGram(tag)] , "#"
+                    print("WordProb : ", word , " " , freq , " " , uniGramFreqs[UniGram(tag)] , "#")
                 p = math.log(freq / float(uniGramFreqs[UniGram(tag)]));
                 self.wordTagProbs[word][tag] = p
 
@@ -83,9 +83,9 @@ class DicLexicon:
         # List<String>
         poslex = self.getPosLexicon(word)
         if poslex != None: 
-            for i in xrange(0, len(poslex)): # List<String>
+            for i in range(0, len(poslex)): # List<String>
                 sub = self.getSubCat(poslex[i])
-                for j in xrange(0, len(sub)): 
+                for j in range(0, len(sub)): 
                     temp.append(sub[j])
 
         for e in initVector: 
@@ -153,7 +153,7 @@ class DicLexicon:
                 if lineParts[1] in self.catTable: 
                     lex = str(lineParts[0])
                     pos = []
-                    for i in xrange(0, len(lineParts)): 
+                    for i in range(0, len(lineParts)): 
                         if lineParts[i] in self.catTable: 
                             pos.append(lineParts[i])
                             
@@ -179,7 +179,7 @@ class DicLexicon:
                 lineParts = re.split("\\s+", line)
                 # List<String>
                 subcat = []
-                for i in xrange( 1, len(lineParts)):
+                for i in range( 1, len(lineParts)):
                     subcat.append(lineParts[i])
 
                 self.catTable[lineParts[0]] = subcat
@@ -430,7 +430,7 @@ class AffixTree:
         i = None
         for entry in n.getChilds(): 
             if not n.getChilds()[entry].getDeleted(): 
-                print " "*indentasi,
+                print(" "*indentasi)
 
                 print(entry + "|" + n.getChilds()[entry].getIG() + "|" + n.getChilds()[entry].getDeleted())
                 for e in n.getChilds()[entry].getTagFreq(): 
@@ -470,7 +470,7 @@ class KnownWordProb(WordProb):
         if self.OOVWord == None: 
             wp = {}
             i = 0
-            for i in xrange(0, self.TagCount): 
+            for i in range(0, self.TagCount): 
                 if (this.NumberTags[i] == "NN"): 
                     wp[i] = 1.0
 
@@ -526,9 +526,9 @@ class OOVWordProb(WordProb):
                 # boolean
                 isUpper = word[0].isupper()
                 if self.mode == 1 or self.mode == 2: 
-                    suffixtree = java2python_runtime.ternary(isUpper, self.UPsuffixTree, self.LOWsuffixTree)
+                    suffixtree = ternary(isUpper, self.UPsuffixTree, self.LOWsuffixTree)
                 if self.mode == 0 or self.mode == 2: 
-                    prefixtree = java2python_runtime.ternary(isUpper, self.UPprefixTree, self.LOWprefixTree)
+                    prefixtree = ternary(isUpper, self.UPprefixTree, self.LOWprefixTree)
 
             if wordFreq > minWordFreq: 
                 if suffixtree is not None: 
@@ -618,11 +618,11 @@ class OOVWordProb(WordProb):
             # boolean
             isUpper = word[0].isupper();
             if self.mode == 1 or self.mode == 2: 
-                suffixtree = java2python_runtime.ternary(isUpper, self.UPsuffixTree, self.LOWsuffixTree)
+                suffixtree = ternary(isUpper, self.UPsuffixTree, self.LOWsuffixTree)
                 sufProbVec = suffixtree.affixTagProbs(word)
 
             if self.mode == 0 or self.mode == 2: 
-                prefixtree = java2python_runtime.ternary(isUpper, self.UPprefixTree, self.LOWprefixTree)
+                prefixtree = ternary(isUpper, self.UPprefixTree, self.LOWprefixTree)
                 preProbVec = prefixtree.affixTagProbs(self.reverseWord(word))
 
 
@@ -683,6 +683,4 @@ class OOVWordProb(WordProb):
 
     def reverseWord(self, src):
         return src[::-1]
-
-
 
